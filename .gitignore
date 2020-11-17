@@ -12,6 +12,7 @@
 # Generated files
 bin/
 gen/
+/repository
 
 # Gradle files
 .gradle/
@@ -92,3 +93,7 @@ org.eclipse.paho.android.sample/libs/
 
 .idea/*
 !.idea/codeStyles/
+
+# Vim artifacts
+*~
+*.swp
