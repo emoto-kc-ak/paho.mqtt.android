@@ -1,5 +1,18 @@
-apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+plugins {
+    id 'com.android.library'
+    id 'com.github.dcendents.android-maven'
+    id 'com.palantir.git-version' version '0.12.3'
+    id 'maven-publish'
+}
+
+group = 'com.github.emoto-kc-ak'
+
+// https://qiita.com/CUTBOSS/items/b4f180d4824fdd50e91a
+def repo = new File(rootDir, 'repository')
+
+def artifactPrefix = 'paho.mqtt.android'
+
+def versionInfo = versionDetails()
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -22,4 +35,24 @@ android {
 dependencies {
     api "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+}
+
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                // https://qiita.com/CUTBOSS/items/b4f180d4824fdd50e91a
+                url = "file://${repo.absolutePath}"
+            }
+        }
+        publications {
+            release(MavenPublication) {
+                from components.release
+
+                groupId = group
+                artifactId = artifactPrefix
+                version = versionInfo.gitHashFull
+            }
+        }
+    }
 }
